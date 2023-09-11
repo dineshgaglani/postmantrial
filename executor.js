@@ -4,7 +4,7 @@ var fs = require('fs');
 
 const initalCollection = require('./FakerAPIs.json')
 
-function executeTest(tagToRun, envToRun) {
+function executeTest(tagToRun, envToRun, data) {
 
     let filteredCollection = initalCollection
 
@@ -17,14 +17,19 @@ function executeTest(tagToRun, envToRun) {
     } 
 
     let envToRunOverride = require('./FakerEnv.postman_environment.json')
-
     if(envToRun) {
         envToRunOverride = require(envToRun)
+    }
+
+    let datafile
+    if(data) {
+        datafile = data
     }
     
     newman.run({
         collection: filteredCollection,
         environment: envToRunOverride,
+        iterationData: datafile,
         reporters: ['html','cli'],
         reporter : { html : { export : './report/htmlReport.html'}},
         insecure: true, // allow self-signed certs, required in postman too
@@ -51,4 +56,9 @@ if(process.argv.indexOf('--env') != -1) {
     envToRun = process.argv[process.argv.indexOf('--env') + 1];
 }
 
-executeTest(tagToRun, envToRun)
+let data
+if(process.argv.indexOf('--data') != -1) {
+    data = process.argv[process.argv.indexOf('--data') + 1];
+}
+
+executeTest(tagToRun, envToRun, data)
