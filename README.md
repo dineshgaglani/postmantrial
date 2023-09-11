@@ -6,7 +6,7 @@ Commands:
 2. Create image for dockerfile 
 
 ```
-docker build . -t postmanexecutor'
+docker build . -t postmanexecutor
 ```
 
 3. Run the container with the image - 
